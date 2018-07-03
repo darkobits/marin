@@ -8,6 +8,10 @@
   "files": [
     "dist"
   ],
+  "keywords": [
+    "dependency",
+    "orchestration"
+  ],
   "scripts": {
     "clean": "rimraf dist",
     "check:styles": "tslint --project tsconfig.json --format codeFrame",

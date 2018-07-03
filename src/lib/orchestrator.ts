@@ -18,7 +18,7 @@ export interface DependencyOrchestratorOptions {
    * Key at which objects/functions should enumerate the objects/functions
    * they depend on.
    *
-   * Note: Symbols may also be provided for this parameter.
+   * Note: Numbers and Symbols may also be provided for this parameter.
    */
   dependencies: string;
 
