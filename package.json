@@ -4,6 +4,10 @@
   "author": "darkobits",
   "description": "General-purpose dependency orchestration.",
   "license": "WTFPL",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darkobits/marin.git"
+  },
   "main": "dist/index.js",
   "files": [
     "dist"
