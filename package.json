@@ -1,6 +1,6 @@
 {
   "name": "@darkobits/marin",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "darkobits",
   "description": "General-purpose dependency orchestration.",
   "license": "WTFPL",
