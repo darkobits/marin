@@ -26,6 +26,7 @@ describe('Orchestrator', () => {
       it('should throw', () => {
         expect(() => {
           return new Orchestrator({
+            // @ts-expect-error - Deliberately using an invalid type here.
             root: false,
             dependencies: 'deps',
             handler: jest.fn()
@@ -42,6 +43,7 @@ describe('Orchestrator', () => {
             root: {
               deps: []
             },
+            // @ts-ignore
             dependencies: false,
             handler: jest.fn()
           });
@@ -58,6 +60,7 @@ describe('Orchestrator', () => {
               deps: []
             },
             dependencies: 'deps',
+            // @ts-ignore
             handler: false
           });
         }).toThrow('Expected `handler` to be of type `Function`');
@@ -70,20 +73,20 @@ describe('Orchestrator', () => {
       const results: Array<string> = [];
 
       const foo = {
-        setup() {
+        setup: () => {
           results.push('foo');
         }
       };
 
       const bar = {
-        setup() {
+        setup: () => {
           results.push('bar');
         },
         dependsOn: [foo]
       };
 
       const baz = {
-        setup() {
+        setup: () => {
           results.push('baz');
         },
         dependsOn: [foo, bar]

@@ -1,1 +1,1 @@
-export {default as default} from './lib/orchestrator';
+export { default } from './lib/orchestrator';

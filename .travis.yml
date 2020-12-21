@@ -1,16 +1,4 @@
 language: node_js
-node_js: 10
-
-install:
-  - npm ci
-
-script:
-  - npm run build
-  - npm test -- --coverage
-
-after_success:
-  - npx codacy-coverage -v < ./coverage/lcov.info
-
-cache:
-  directories:
-    - node_modules
+node_js: 14
+script: npx nps test.coverage
+after_success: npx codacy-coverage -v < ./coverage/lcov.info

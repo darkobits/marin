@@ -12,7 +12,7 @@ export interface DependencyOrchestratorOptions {
    * value should have an array of the objects/functions it depends on
    * at the "dependencies" key below.
    */
-  root: any;
+  root: LooseObject | LooseFunction;
 
   /**
    * Key at which objects/functions should enumerate the objects/functions
@@ -20,7 +20,7 @@ export interface DependencyOrchestratorOptions {
    *
    * Note: Numbers and Symbols may also be provided for this parameter.
    */
-  dependencies: string;
+  dependencies: string | symbol;
 
   /**
    * Handler that will be invoked for each dependency in the graph and should
@@ -36,13 +36,13 @@ export default class DependencyOrchestrator {
   /**
    * Orchestrator instance.
    */
-  private readonly _orchestrator = new Orchestrator();
+  private readonly orchestrator = new Orchestrator();
 
 
   /**
    * Used to detect circular dependencies.
    */
-  private readonly _graph: Array<any> = [];
+  private readonly graph: Array<any> = [];
 
 
   /**
@@ -51,44 +51,46 @@ export default class DependencyOrchestrator {
    * we can ensure that each value we encounter gets a unique task
    * name by using its index in this array.
    */
-  private readonly _knownValues: Array<any> = [];
+  private readonly knownValues: Array<any> = [];
 
 
   /**
    * Root object/function for the dependency graph.
    */
-  private readonly _root: LooseObject | LooseFunction;
+  private readonly root: LooseObject | LooseFunction;
 
 
   /**
    * Key on each object/function where its dependencies are enumerated.
    *
-   * Note: Symbols may also be provided as
+   * Note: Symbols may also be provided.
    */
-  private readonly _dependenciesKey: string;
+  private readonly dependenciesKey: string | symbol;
 
 
   /**
    * User-provided function that will be invoked with each dependency.
    */
-  private readonly _handler: Function;
+  private readonly handler: LooseFunction;
 
 
-  constructor({root, dependencies, handler}: DependencyOrchestratorOptions) {
+  constructor({ root, dependencies, handler }: DependencyOrchestratorOptions) {
     // [Runtime] Validate params.
-    ow(root, ow.object.label('root'));
+    ow(root, 'root', ow.object);
     ow(dependencies, ow.any(ow.string, ow.symbol));
-    ow(handler, ow.function.label('handler'));
+    ow(handler, 'handler', ow.function);
 
-    this._root = root;
-    this._dependenciesKey = dependencies;
-    this._handler = handler;
+    this.root = root;
+    this.dependenciesKey = dependencies;
+    this.handler = handler;
 
     // [Runtime] Ensure the root value has an array at the configured key. If it
     // does not, this is likely user error.
-    ow(root[this._dependenciesKey], ow.array.label('root dependencies'));
+    // @ts-expect-error - Indexing with Symbols is still not well-supported in
+    // TypeScript.
+    ow(this.root[this.dependenciesKey], 'root dependencies', ow.array);
 
-    this._buildTasks(this._root);
+    this.buildTasks(this.root);
   }
 
 
@@ -96,60 +98,60 @@ export default class DependencyOrchestrator {
    * Returns a string that can be passed to orchestrator to uniquely identify
    * the provided value.
    */
-  private _getIdForValue(value: any): string {
-    if (!this._knownValues.includes(value)) {
-      this._knownValues.push(value);
+  private getIdForValue(value: any): string {
+    if (!this.knownValues.includes(value)) {
+      this.knownValues.push(value);
     }
 
-    const id = this._knownValues.findIndex(v => v === value);
+    const id = this.knownValues.findIndex(v => v === value);
     return id.toString();
   }
 
 
   /**
-   * Recursively traverses the dependency graph and adds tasks to the orchestrator
-   * instance.
+   * Recursively traverses the dependency graph and adds tasks to the
+   * orchestrator instance.
    */
-  private _buildTasks(root: LooseObject | LooseFunction): void {
-    const rootTaskId = this._getIdForValue(root);
+  private buildTasks(root: LooseObject | LooseFunction): void {
+    const rootTaskId = this.getIdForValue(root);
 
-    if (this._orchestrator.hasTask(rootTaskId)) {
+    if (this.orchestrator.hasTask(rootTaskId)) {
       return;
     }
 
     // Begin with an empty array of dependency IDs.
     let taskDependencyIds: Array<string> = [];
 
-    // If the current root has an array of dependencies at the configured key, recursively
-    // add tasks for each of its dependencies.
-    if (Array.isArray(root[this._dependenciesKey])) {
-      root[this._dependenciesKey].forEach((dependency: any) => {
+    // If the current root has an array of dependencies at the configured key,
+    // recursively add tasks for each of its dependencies.
+    if (Array.isArray(root[this.dependenciesKey as string])) {
+      root[this.dependenciesKey as string].forEach((dependency: any) => {
         // Check for cyclic dependencies.
-        this._graph.push([root, dependency]);
+        this.graph.push([root, dependency]);
 
         try {
-          toposort(this._graph);
-        } catch (err) { // tslint:disable-line no-unused
+          toposort(this.graph);
+        } catch {
           throw new Error('[DependencyOrchestrator] Circular dependency detected.');
         }
 
-        this._buildTasks(dependency);
+        this.buildTasks(dependency);
       });
 
-      // Now that each dependency has been entered into our known values array, we can
-      // map root's dependencies into an array of string IDs, which can then be supplied
-      // to orchestrator.
-      taskDependencyIds = root[this._dependenciesKey].map((dependency: any) => {
-        return this._getIdForValue(dependency);
+      // Now that each dependency has been entered into our known values array,
+      // we can map root's dependencies into an array of string IDs, which can
+      // then be supplied to orchestrator.
+      taskDependencyIds = root[this.dependenciesKey as string].map((dependency: any) => {
+        return this.getIdForValue(dependency);
       });
     }
 
-    // Finally, add the task to orchestrator using indexes from our known values array
-    // (as strings) as stand-ins for actual values.
-    this._orchestrator.add(rootTaskId, taskDependencyIds, () => {
-      // To handle the actual task for the current root (re: dependency), delegate to
-      // the configured handler, passing it the current root.
-      return Reflect.apply(this._handler, null, [root]);
+    // Finally, add the task to orchestrator using indexes from our known values
+    // array (as strings) as stand-ins for actual values.
+    this.orchestrator.add(rootTaskId, taskDependencyIds, () => {
+      // To handle the actual task for the current root (re: dependency),
+      // delegate to the configured handler, passing it the current root.
+      return Reflect.apply(this.handler, undefined, [root]);
     });
   }
 
@@ -157,9 +159,12 @@ export default class DependencyOrchestrator {
   /**
    * Starts the orchestration.
    */
-  async start(): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      this._orchestrator.start(this._getIdForValue(this._root), (err: Error) => err ? reject(err) : resolve());
+  async start() {
+    return new Promise<void>((resolve, reject) => {
+      this.orchestrator.start(
+        this.getIdForValue(this.root),
+        (err: Error) => (err ? reject(err) : resolve())
+      );
     });
   }
 }
