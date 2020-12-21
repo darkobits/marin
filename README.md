@@ -3,8 +3,8 @@
 </a>
 <p align="center">
   <a href="https://www.npmjs.com/package/@darkobits/marin"><img src="https://img.shields.io/npm/v/@darkobits/marin.svg?style=flat-square"></a>
-  <a href="https://travis-ci.com/github/darkobits/marin"><img src="https://img.shields.io/travis/com/darkobits/marin.svg?style=flat-square"></a>
-  <a href="https://www.codacy.com/app/darkobits/marin"><img src="https://img.shields.io/codacy/coverage/14f6626623b44da58a6d8c3e44f479ce.svg?style=flat-square"></a>
+  <a href="https://github.com/darkobits/marin/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/workflow/status/darkobits/marin/CI/master?style=flat-square"></a>
+  <a href="https://app.codecov.io/gh/darkobits/marin/branch/master"><img src="https://img.shields.io/codecov/c/github/darkobits/marin/master?style=flat-square"></a>
   <a href="https://david-dm.org/darkobits/marin"><img src="https://img.shields.io/david/darkobits/marin.svg?style=flat-square"></a>
   <a href="https://github.com/conventional-changelog/standard-version"><img src="https://img.shields.io/badge/conventional%20commits-1.0.0-027dc6.svg?style=flat-square"></a>
 </p>
