@@ -1,15 +1,15 @@
 <a href="#top" id="top">
-  <img src="https://user-images.githubusercontent.com/441546/42152624-912154b0-7d95-11e8-92a7-eafe00ffe7e8.png" style="max-width: 100%">
+  <img src="https://user-images.githubusercontent.com/441546/102761498-d5874980-432b-11eb-93bf-b4c78ab4d107.png" style="max-width: 100%">
 </a>
 <p align="center">
   <a href="https://www.npmjs.com/package/@darkobits/marin"><img src="https://img.shields.io/npm/v/@darkobits/marin.svg?style=flat-square"></a>
-  <a href="https://travis-ci.org/darkobits/marin"><img src="https://img.shields.io/travis/darkobits/marin.svg?style=flat-square"></a>
+  <a href="https://travis-ci.com/github/darkobits/marin"><img src="https://img.shields.io/travis/com/darkobits/marin.svg?style=flat-square"></a>
   <a href="https://www.codacy.com/app/darkobits/marin"><img src="https://img.shields.io/codacy/coverage/14f6626623b44da58a6d8c3e44f479ce.svg?style=flat-square"></a>
+  <a href="https://david-dm.org/darkobits/marin"><img src="https://img.shields.io/david/darkobits/marin.svg?style=flat-square"></a>
   <a href="https://github.com/conventional-changelog/standard-version"><img src="https://img.shields.io/badge/conventional%20commits-1.0.0-027dc6.svg?style=flat-square"></a>
-  <a href="https://github.com/sindresorhus/xo"><img src="https://img.shields.io/badge/code_style-XO-e271a5.svg?style=flat-square"></a>
 </p>
 
-Marin is a general-purpose tool for dependency orchestration based on the popular [Orchestrator](https://github.com/robrich/orchestrator) library. It lets you express relationships between objects, functions, classes, or any kind of value that permits property assignment.
+Marin is a general-purpose tool for dependency orchestration based on the popular [Orchestrator](https://github.com/robrich/orchestrator) library. It lets you express relationships between objects, functions, classes, or any kind of value that permits property assignment. Because it uses Orchestrator under the hood, tasks will run concurrently whern possible and sequentially when necessary.
 
 There are only 3 concepts you need to understand to use Marin:
 
@@ -150,8 +150,7 @@ const orchestration = new Orchestrator({
 await orchestration.start();
 ```
 
-## &nbsp;
-<p align="center">
-  <br>
-  <img width="22" height="22" src="https://cloud.githubusercontent.com/assets/441546/25318539/db2f4cf2-2845-11e7-8e10-ef97d91cd538.png">
-</p>
+<br />
+<a href="#top">
+  <img src="https://user-images.githubusercontent.com/441546/102322726-5e6d4200-3f34-11eb-89f2-c31624ab7488.png" style="max-width: 100%;">
+</a>
